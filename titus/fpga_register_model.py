@@ -500,7 +500,21 @@ def generate_registers():
 (116, "genreg1 (General purpose register)", 2**(31)-1, -2**(31), False, None),
 (117, "genreg2", 2**(31)-1, -2**(31), False, None),
 (118, "genreg3", 2**(31)-1, -2**(31), False, None),
-(119, "genreg4", 2**(31)-1, -2**(31), False, None)
+(119, "genreg4", 2**(31)-1, -2**(31), False, None),
+(120, "PID 1 Autoactivate", 0, 0, True, ["Never",
+                                        "Always",
+                                        "Input 1 > threshold?",
+                                        "Input 2 > threshold?",
+                                        "Input 3 > threshold?",
+                                        "Input 4 > threshold?",
+                                        "Input 1 < threshold?",
+                                        "Input 2 < threshold?",
+                                        "Input 3 < threshold?",
+                                        "Input 4 < threshold?"]),
+(121, "PID 1 Autoactivate", 0, 0, True, ["Never",
+                                         "Always"]),
+(122, "N/A", 0, 0, False, None),
+(123, "N/A", 0, 0, False, None)
 ):
         yield Register(address, name, maxvalue, minvalue, 0,
                        nametype, valuelist)

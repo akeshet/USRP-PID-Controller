@@ -5,9 +5,9 @@ Timing Analyzer Summary
 Type           : Worst-case tsu
 Slack          : N/A
 Required Time  : None
-Actual Time    : 17.138 ns
-From           : rx_a_b[0]
-To             : out_b_b[12]_RTM128_RTM11129_RTM01762_RTM02275_RTM02288
+Actual Time    : 18.770 ns
+From           : rx_b_a[1]
+To             : lincomb2input2[1]_RTM02_RTM01214_RTM11276
 From Clock     : --
 To Clock       : master_clk
 Failed Paths   : 0
@@ -15,8 +15,8 @@ Failed Paths   : 0
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 21.905 ns
-From           : TriangleWaveGenerator:triangleGenerator|counter[34]
+Actual Time    : 22.812 ns
+From           : TriangleWaveGenerator:triangleGenerator|counter[33]
 To             : io_tx_a[1]
 From Clock     : master_clk
 To Clock       : --
@@ -25,9 +25,9 @@ Failed Paths   : 0
 Type           : Worst-case tpd
 Slack          : N/A
 Required Time  : None
-Actual Time    : 13.221 ns
+Actual Time    : 12.007 ns
 From           : usbctl[2]
-To             : usbdata[15]
+To             : usbdata[13]
 From Clock     : --
 To Clock       : --
 Failed Paths   : 0
@@ -35,7 +35,7 @@ Failed Paths   : 0
 Type           : Worst-case th
 Slack          : N/A
 Required Time  : None
-Actual Time    : 0.046 ns
+Actual Time    : 0.053 ns
 From           : SEN_FPGA
 To             : serial_io:serial_io|enable_d1
 From Clock     : --
@@ -43,43 +43,43 @@ To Clock       : master_clk
 Failed Paths   : 0
 
 Type           : Clock Setup: 'master_clk'
-Slack          : 2.690 ns
+Slack          : 1.165 ns
 Required Time  : 64.00 MHz ( period = 15.625 ns )
-Actual Time    : 77.31 MHz ( period = 12.935 ns )
-From           : PIDfeedback:pidb|error[1]_RTM02237
-To             : PIDfeedback:pidb|iAccum2[26]
+Actual Time    : 69.16 MHz ( period = 14.460 ns )
+From           : PIDfeedback:pidb|error[2]
+To             : PIDfeedback:pidb|iAccum2[22]
 From Clock     : master_clk
 To Clock       : master_clk
 Failed Paths   : 0
 
 Type           : Clock Setup: 'SCLK'
-Slack          : 989.076 ns
+Slack          : 990.971 ns
 Required Time  : 1.00 MHz ( period = 1000.000 ns )
-Actual Time    : 91.54 MHz ( period = 10.924 ns )
-From           : serial_io:serial_io|ser_ctr[1]
-To             : serial_io:serial_io|serial_data[1]
+Actual Time    : 110.75 MHz ( period = 9.029 ns )
+From           : serial_io:serial_io|serial_addr[0]
+To             : serial_io:serial_io|serial_data[24]
+From Clock     : SCLK
+To Clock       : SCLK
+Failed Paths   : 0
+
+Type           : Clock Hold: 'SCLK'
+Slack          : 0.892 ns
+Required Time  : 1.00 MHz ( period = 1000.000 ns )
+Actual Time    : N/A
+From           : serial_io:serial_io|serial_addr[2]
+To             : serial_io:serial_io|serial_addr[3]
 From Clock     : SCLK
 To Clock       : SCLK
 Failed Paths   : 0
 
 Type           : Clock Hold: 'master_clk'
-Slack          : 0.884 ns
+Slack          : 1.031 ns
 Required Time  : 64.00 MHz ( period = 15.625 ns )
 Actual Time    : N/A
-From           : serial_io:serial_io|enable_d1
-To             : serial_io:serial_io|enable_d2
+From           : lincomb2input2[4]_RTM119_RTM01190_RTM11313
+To             : lincomb2input2[4]_RTM119_RTM01190_RTM11313
 From Clock     : master_clk
 To Clock       : master_clk
-Failed Paths   : 0
-
-Type           : Clock Hold: 'SCLK'
-Slack          : 1.040 ns
-Required Time  : 1.00 MHz ( period = 1000.000 ns )
-Actual Time    : N/A
-From           : serial_io:serial_io|serial_data[29]
-To             : serial_io:serial_io|serial_data[30]
-From Clock     : SCLK
-To Clock       : SCLK
 Failed Paths   : 0
 
 Type           : Total number of failed paths

@@ -275,9 +275,13 @@ module usrp_std
 	// 114: Linear combination 1 input 2 gated on rx_a_a above threshold? (1 = yes, 0 = no)
 	// 115: Linear combination 2 input 2 gated on rx_b_a above threshold? (1 = yes, 0 = no)	
 	// 116: General purpose 32 bit value, genreg1
-	// 116: General purpose 32 bit value, genreg2
-	// 116: General purpose 32 bit value, genreg3
-	// 116: General purpose 32 bit value, genreg4
+	// 117: General purpose 32 bit value, genreg2
+	// 118: General purpose 32 bit value, genreg3
+	// 119: General purpose 32 bit value, genreg4
+	// 120: PID 1 Autoactivate condition
+	// 121: PID 2 Autoactivate condition
+	// 122: NA
+	// 123: NA
 	
     // PID control gain coefficients for controllers a, b, c, and d
     // (also known as controllers 1, 2, 3, and 4)
@@ -406,6 +410,12 @@ module usrp_std
 	setting_reg #(117) genreg2Reg(.clock(master_clk),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(genreg2));
 	setting_reg #(118) genreg3Reg(.clock(master_clk),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(genreg3));
 	setting_reg #(119) genreg4Reg(.clock(master_clk),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(genreg4));
+	
+	wire signed [31:0] PID1autoact_mux, PID2autoact_mux, PID3autoact_mux, PID4autoact_mux;
+	setting_reg #(120) pidautoact1Reg(.clock(master_clk),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(PID1autoact_mux));
+	setting_reg #(121) pidautoact2Reg(.clock(master_clk),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(PID2autoact_mux));
+	setting_reg #(122) pidautoact3Reg(.clock(master_clk),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(PID3autoact_mux));
+	setting_reg #(123) pidautoact4Reg(.clock(master_clk),.strobe(serial_strobe),.addr(serial_addr),.in(serial_data),.out(PID4autoact_mux));
 
 
 // INSTANTIATION OF MODULES
@@ -580,6 +590,9 @@ parameter s_idle 			= 0,
           
           
 reg [32:0] program_state;          
+
+reg PID1autoact, PID2autoact;
+
 
    
 always @(posedge master_clk) begin
@@ -925,7 +938,8 @@ always @(posedge master_clk) begin
 			out_b_b<=(rx_b_a<thr2) ? 500 : -500;
 		10: 
 			out_b_b<=(rx_a_b<thr3) ? 500 : -500;
-		//11 not used
+		11: 
+			out_b_b<=(rx_b_b<thr4) ? 500 : -500;
 		12:
 			out_b_b<=(rx_a_a<<<2);
 		13:
@@ -979,9 +993,70 @@ always @(posedge master_clk) begin
 			out_b_b<=(mux3<<<7);
 	endcase	
 	
+
+	// PID Autoactivation muxes
+	//0:	"Never",
+	//1:  "Always",
+	//2:  "Input 1 > threshold?",
+	//3:  "Input 2 > threshold?",
+	//4:  "Input 3 > threshold?",
+	//5:  "Input 4 > threshold?",
+	//6:  "Input 1 < threshold?",
+	//7:  "Input 2 < threshold?",
+	//8:  "Input 3 < threshold?",
+	//9:  "Input 4 < threshold?"
+	
+	case (PID1autoact_mux)
+		0:
+			PID1autoact<=0;
+		1:
+			PID1autoact<=1;
+		2:
+			PID1autoact<=rx_a_a<thr1;
+		3:
+			PID1autoact<=rx_b_a<thr2;
+		4: 
+			PID1autoact<=rx_a_b<thr3;
+		5: 
+			PID1autoact<=rx_b_b<thr4;
+		6:
+			PID1autoact<=rx_a_a>thr1;
+		7:
+			PID1autoact<=rx_b_a>thr2;
+		8: 
+			PID1autoact<=rx_a_b>thr3;
+		9: 
+			PID1autoact<=rx_b_b>thr4;
+	endcase
+	
+	case (PID2autoact_mux)
+		0:
+			PID2autoact<=0;
+		1:
+			PID2autoact<=1;
+		2:
+			PID2autoact<=rx_a_a<thr1;
+		3:
+			PID2autoact<=rx_b_a<thr2;
+		4: 
+			PID2autoact<=rx_a_b<thr3;
+		5: 
+			PID2autoact<=rx_b_b<thr4;
+		6:
+			PID2autoact<=rx_a_a>thr1;
+		7:
+			PID2autoact<=rx_b_a>thr2;
+		8: 
+			PID2autoact<=rx_a_b>thr3;
+		9: 
+			PID2autoact<=rx_b_b>thr4;
+	endcase
+	
 // Executive function, state machine stuff, etc.
 
 // "user entry points" to state machine.
+// deprecated, for now
+/*
 	if (user_program_state==0) begin
 		program_state<=s_idle_waiting;
 	end
@@ -995,9 +1070,11 @@ always @(posedge master_clk) begin
 				program_state<=s_lockscan2;
 		endcase
 	end
-
+*/
 
 // state machine logic	
+// deprecated, for now
+/*
 	case (program_state)
 		s_idle:
 		begin
@@ -1065,6 +1142,7 @@ always @(posedge master_clk) begin
 		end
 				
 	endcase	
+*/	
 
 end      
 
@@ -1076,7 +1154,7 @@ end
    
    
    // miscellaneus wires and registers from original code
-      wire [31:0] tx_debugbus, rx_debugbus;
+wire [31:0] tx_debugbus, rx_debugbus;
    
    
  
