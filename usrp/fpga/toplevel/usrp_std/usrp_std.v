@@ -592,6 +592,7 @@ parameter s_idle 			= 0,
 reg [32:0] program_state;          
 
 reg PID1autoact, PID2autoact;
+reg oldPID1autoact, oldPID2autoact;
 
 
    
@@ -1029,6 +1030,8 @@ always @(posedge master_clk) begin
 			PID1autoact<=rx_b_b>thr4;
 	endcase
 	
+	oldPID1autoact<=PID1autoact;	
+	
 	case (PID2autoact_mux)
 		0:
 			PID2autoact<=0;
@@ -1051,6 +1054,29 @@ always @(posedge master_clk) begin
 		9: 
 			PID2autoact<=rx_b_b>thr4;
 	endcase
+	
+	oldPID2autoact<=PID2autoact;
+	
+	
+	
+	// PID Auto-activation
+	
+	if (PID1autoact && ~oldPID1autoact) begin
+		change_mux1<=1;
+		new_mux1<=1;
+	end
+	else begin
+		change_mux1<=0;
+	end
+	
+	
+	if (PID2autoact && ~oldPID2autoact) begin
+		change_mux2<=1;
+		new_mux2<=1;
+	end
+	else begin
+		change_mux2<=0;
+	end
 	
 // Executive function, state machine stuff, etc.
 
