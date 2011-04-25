@@ -511,8 +511,18 @@ def generate_registers():
                                         "Input 2 < threshold?",
                                         "Input 3 < threshold?",
                                         "Input 4 < threshold?"]),
-(121, "PID 1 Autoactivate", 0, 0, True, ["Never",
-                                         "Always"]),
+
+(121, "PID 2 Autoactivate", 0, 0, True, ["Never",
+                                        "Always",
+                                        "Input 1 > threshold?",
+                                        "Input 2 > threshold?",
+                                        "Input 3 > threshold?",
+                                        "Input 4 > threshold?",
+                                        "Input 1 < threshold?",
+                                        "Input 2 < threshold?",
+                                        "Input 3 < threshold?",
+                                        "Input 4 < threshold?"]),
+
 (122, "N/A", 0, 0, False, None),
 (123, "N/A", 0, 0, False, None)
 ):
